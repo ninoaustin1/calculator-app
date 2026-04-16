@@ -1,9 +1,0 @@
-- name: Build with Buildozer
-        run: |
-          export PATH=$PATH:$HOME/.local/bin
-          # This is the "magic" line that cleans the mess
-          buildozer android clean
-          # This starts the actual build
-          buildozer android debug
-        env:
-          ACCEPT_SDK_LICENSE: "y"
