@@ -1,0 +1,245 @@
+#:kivy 2.0
+#:import sp  kivy.metrics.sp
+#:import dp  kivy.metrics.dp
+
+# ─────────────────────────────────────────────────────────────────────────────
+# RoundRippleButton — fully defined in KV, no Python class needed.
+# ─────────────────────────────────────────────────────────────────────────────
+
+<RoundRippleButton@Button>:
+    btn_bg:     0.91, 0.91, 0.93, 1
+    btn_ripple: 0.70, 0.70, 0.75, 1
+    text_color: 0.08, 0.08, 0.10, 1
+
+    background_normal: ""
+    background_color:  0, 0, 0, 0
+    color:             self.text_color
+    font_size:         min(self.width, self.height) * 0.38
+    bold:              False
+
+    canvas.before:
+        Color:
+            rgba: self.btn_bg
+        RoundedRectangle:
+            pos:    self.pos
+            size:   self.size
+            radius: [min(self.width, self.height) / 2]
+
+        StencilPush:
+        RoundedRectangle:
+            pos:    self.pos
+            size:   self.size
+            radius: [min(self.width, self.height) / 2]
+        StencilUse:
+
+    canvas.after:
+        StencilUnUse:
+        RoundedRectangle:
+            pos:    self.pos
+            size:   self.size
+            radius: [min(self.width, self.height) / 2]
+        StencilPop:
+
+    Widget:
+        id: _ripple
+        size_hint: None, None
+        size:    0, 0
+        opacity: 0
+        canvas:
+            Color:
+                rgba: root.btn_ripple
+            Ellipse:
+                pos:  self.pos
+                size: self.size
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Root — FloatLayout so the error label floats freely on top of everything
+# ─────────────────────────────────────────────────────────────────────────────
+
+FloatLayout:
+
+    # ── Main calculator (fills entire screen) ────────────────────────────────
+    BoxLayout:
+        size_hint: 1, 1
+        orientation: "vertical"
+        spacing:     0
+        padding:     0
+
+        canvas.before:
+            Color:
+                rgba: 0.96, 0.96, 0.97, 1
+            Rectangle:
+                pos:  self.pos
+                size: self.size
+
+        # ── Display area ─────────────────────────────────────────────────────
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: 0.28
+            padding:     [22, 14, 22, 6]
+            spacing:     0
+
+            Label:
+                id:        display
+                text:      "0"
+                font_size: sp(28) if len(self.text) > 12 else (sp(38) if len(self.text) > 9 else sp(52))
+                bold:      False
+                color:     0.08, 0.08, 0.10, 1
+                halign:    "right"
+                valign:    "middle"
+                text_size: self.size
+
+        # ── Thin separator ───────────────────────────────────────────────────
+        Widget:
+            size_hint_y: None
+            height:      dp(1)
+            canvas:
+                Color:
+                    rgba: 0.80, 0.80, 0.84, 1
+                Rectangle:
+                    pos:  self.pos
+                    size: self.size
+
+        # ── Button grid ──────────────────────────────────────────────────────
+        GridLayout:
+            cols:        4
+            rows:        5
+            size_hint_y: 0.72
+            padding:     [12, 12, 12, 18]
+            spacing:     [10, 10]
+
+            # Row 1
+            RoundRippleButton:
+                text:       "C"
+                btn_bg:     0.83, 0.83, 0.88, 1
+                btn_ripple: 0.63, 0.63, 0.72, 1
+                text_color: 0.10, 0.44, 0.88, 1
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "<<"
+                btn_bg:     0.83, 0.83, 0.88, 1
+                btn_ripple: 0.63, 0.63, 0.72, 1
+                text_color: 0.10, 0.44, 0.88, 1
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "x²"
+                btn_bg:     0.83, 0.83, 0.88, 1
+                btn_ripple: 0.63, 0.63, 0.72, 1
+                text_color: 0.10, 0.44, 0.88, 1
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "÷"
+                btn_bg:     0.76, 0.87, 1.00, 1
+                btn_ripple: 0.55, 0.72, 0.95, 1
+                text_color: 0.08, 0.38, 0.85, 1
+                on_release: app.on_button_press(self)
+
+            # Row 2
+            RoundRippleButton:
+                text:       "7"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "8"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "9"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "×"
+                btn_bg:     0.76, 0.87, 1.00, 1
+                btn_ripple: 0.55, 0.72, 0.95, 1
+                text_color: 0.08, 0.38, 0.85, 1
+                on_release: app.on_button_press(self)
+
+            # Row 3
+            RoundRippleButton:
+                text:       "4"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "5"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "6"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "−"
+                btn_bg:     0.76, 0.87, 1.00, 1
+                btn_ripple: 0.55, 0.72, 0.95, 1
+                text_color: 0.08, 0.38, 0.85, 1
+                on_release: app.on_button_press(self)
+
+            # Row 4
+            RoundRippleButton:
+                text:       "1"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "2"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "3"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "+"
+                btn_bg:     0.76, 0.87, 1.00, 1
+                btn_ripple: 0.55, 0.72, 0.95, 1
+                text_color: 0.08, 0.38, 0.85, 1
+                on_release: app.on_button_press(self)
+
+            # Row 5
+            RoundRippleButton:
+                text:       "%"
+                btn_bg:     0.83, 0.83, 0.88, 1
+                btn_ripple: 0.63, 0.63, 0.72, 1
+                text_color: 0.10, 0.44, 0.88, 1
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "0"
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "."
+                on_release: app.on_button_press(self)
+
+            RoundRippleButton:
+                text:       "="
+                btn_bg:     0.13, 0.66, 0.36, 1
+                btn_ripple: 0.20, 0.82, 0.50, 1
+                text_color: 1.00, 1.00, 1.00, 1
+                on_release: app.on_button_press(self)
+
+    # ── Floating error label (fixed dp size, draggable) ──────────────────────
+    Label:
+        id:          error_label
+        text:        ""
+        opacity:     0
+        size_hint:   None, None
+        height: dp(54)
+        width: self.texture_size[0] + dp(30)
+        pos:         self.parent.center_x - self.width / 2, self.parent.height * 0.70
+        font_size:   sp(20)
+        bold:        True
+        color:       1, 1, 1, 1
+        on_touch_down: app.error_drag_start(self, args[1])
+        on_touch_move: app.error_drag_move(self, args[1])
+        on_touch_up:   app.error_drag_end(self, args[1])
+        canvas.before:
+            Color:
+                rgba: 0.8, 0.2, 0.2, 1
+            RoundedRectangle:
+                pos:    self.pos
+                size:   self.size
+                radius: [dp(27)]
