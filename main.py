@@ -130,7 +130,7 @@ class CalculatorApp(App):
         if self.eq == "1491415/0":
             self.clear()
             self.animate_error(
-                "Oops! Nino never taught me \nhow to divide a number by zero")
+                "   Oops! Nino never taught me\nhow to divide a number by zero")
             return
 
         try:
